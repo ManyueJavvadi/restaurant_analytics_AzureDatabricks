@@ -1,0 +1,25 @@
+workspace_host: https://adb-workspace-placeholder.azuredatabricks.net
+warehouse_id: REPLACE_WITH_PROD_WAREHOUSE_ID
+catalog_name: ws_dbxprojectrc
+bronze_schema: 01_bronze
+silver_schema: 02_silver
+gold_schema: 03_gold
+eventhub_namespace: evh-ns-dbxprojectrc
+eventhub_name: orders
+eventhub_connection_string_secret_scope: restaurant_analytics
+eventhub_connection_string_secret_key: eventhub_connection_string
+# Production environment variables
+# Override bundle defaults for prod deployment
+
+variables:
+  catalog_name: ws_dbxprojectrc
+  
+  # SQL Warehouse ID for production
+  warehouse_id: ""  # TODO: Set via CLI flag or env var
+  
+  # Event Hub configuration
+  eh_namespace: evh-ns-dbxprojectrc
+  eh_name: orders
+  
+  # Production notification email (could be team distribution list)
+  notification_email: manyueinfo@gmail.com

@@ -1,0 +1,125 @@
+bundle:
+  name: restaurant-analytics
+
+include:
+  - resources/jobs/*.yml
+  - resources/pipelines/*.yml
+  - resources/dashboards/*.yml
+
+variables:
+  workspace_host:
+    description: Workspace host for bundle deployment
+    default: https://adb-workspace-placeholder.azuredatabricks.net
+  warehouse_id:
+    description: SQL warehouse for dashboard deployment
+    default: REPLACE_WITH_WAREHOUSE_ID
+  catalog_name:
+    description: Unity Catalog for pipeline targets
+    default: ws_dbxprojectrc
+  bronze_schema:
+    description: Bronze schema name
+    default: 01_bronze
+  silver_schema:
+    description: Silver schema name
+    default: 02_silver
+  gold_schema:
+    description: Gold schema name
+    default: 03_gold
+  eventhub_namespace:
+    description: Event Hub namespace
+    default: evh-ns-dbxprojectrc
+  eventhub_name:
+    description: Event Hub topic name
+    default: orders
+  eventhub_connection_string_secret_scope:
+    description: Secret scope that stores the Event Hub connection string
+    default: restaurant_analytics
+  eventhub_connection_string_secret_key:
+    description: Secret key for the Event Hub connection string
+    default: eventhub_connection_string
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: ${var.workspace_host}
+    variables:
+      catalog_name: ws_dbxprojectrc
+      bronze_schema: 01_bronze
+      silver_schema: 02_silver
+      gold_schema: 03_gold
+
+  prod:
+    mode: production
+    workspace:
+      host: ${var.workspace_host}
+      root_path: /Shared/.bundle/${bundle.name}/${bundle.target}
+    run_as:
+      user_name: manyueinfo@gmail.com
+# Databricks bundle configuration for Restaurant Analytics project
+# This bundle manages three pipelines (ingestion, silver, gold) and a master orchestration job
+
+bundle:
+  name: restaurant-analytics
+
+# Include all resource definition files from the resources directory
+include:
+  - resources/**/*.yml
+
+# Variables used across targets
+variables:
+  catalog_name:
+    description: Unity Catalog catalog name
+    default: ws_dbxprojectrc
+  
+  warehouse_id:
+    description: SQL Warehouse ID for dashboard
+    default: ""  # Must be provided via environment variable or CLI flag
+  
+  eh_namespace:
+    description: Event Hub namespace
+    default: evh-ns-dbxprojectrc
+  
+  eh_name:
+    description: Event Hub name
+    default: orders
+  
+  notification_email:
+    description: Email for job failure notifications
+    default: manyueinfo@gmail.com
+
+# Deployment targets
+targets:
+  # Development target - personal workspace
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-2506270859788199.19.azuredatabricks.net
+    
+    variables:
+      catalog_name: ws_dbxprojectrc
+    
+    # Use current user's email for notifications in dev
+    run_as:
+      user_name: manyueinfo@gmail.com
+  
+  # Production target - shared deployment
+  prod:
+    mode: production
+    workspace:
+      host: https://adb-2506270859788199.19.azuredatabricks.net
+      root_path: /Shared/.bundle/prod/${bundle.name}
+    
+    variables:
+      catalog_name: ws_dbxprojectrc
+    
+    # Production runs as service principal or designated user
+    run_as:
+      user_name: manyueinfo@gmail.com
+    
+    # Permissions for production resources
+    permissions:
+      - user_name: manyueinfo@gmail.com
+        level: CAN_MANAGE

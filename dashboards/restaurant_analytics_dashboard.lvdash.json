@@ -1,1 +1,2431 @@
-{"_placeholder": "Export the dashboard from the Databricks workspace UI and replace this file. In the workspace, open the Restaurant Analytics Dashboard, click the three-dot menu, choose Download dashboard definition, and save the .lvdash.json file here."}
+{
+  "datasets": [
+    {
+      "name": "a37fc197",
+      "displayName": "d_sales_summary",
+      "config": {
+        "version": "1.1",
+        "source": "ws_dbxprojectrc.`03_gold`.d_sales_summary",
+        "dimensions": [
+          {
+            "name": "order_date",
+            "expr": "source.order_date",
+            "displayName": "Order Date"
+          },
+          {
+            "name": "total_orders",
+            "expr": "source.total_orders",
+            "displayName": "Total Orders"
+          },
+          {
+            "name": "total_revenue",
+            "expr": "source.total_revenue",
+            "displayName": "Total Revenue"
+          },
+          {
+            "name": "avg_order_value",
+            "expr": "source.avg_order_value",
+            "displayName": "Avg Order Value"
+          },
+          {
+            "name": "unique_customers",
+            "expr": "source.unique_customers",
+            "displayName": "Unique Customers"
+          },
+          {
+            "name": "unique_restaurants",
+            "expr": "source.unique_restaurants",
+            "displayName": "Unique Restaurants"
+          },
+          {
+            "name": "dine_in_orders",
+            "expr": "source.dine_in_orders",
+            "displayName": "Dine In Orders"
+          },
+          {
+            "name": "takeaway_orders",
+            "expr": "source.takeaway_orders",
+            "displayName": "Takeaway Orders"
+          },
+          {
+            "name": "delivery_orders",
+            "expr": "source.delivery_orders",
+            "displayName": "Delivery Orders"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a1b1c867",
+      "displayName": "fact_orders",
+      "config": {
+        "version": "1.1",
+        "source": "ws_dbxprojectrc.`02_silver`.fact_orders",
+        "dimensions": [
+          {
+            "name": "order_id",
+            "expr": "source.order_id",
+            "displayName": "Order Id"
+          },
+          {
+            "name": "order_timestamp",
+            "expr": "source.order_timestamp",
+            "displayName": "Order Timestamp"
+          },
+          {
+            "name": "order_date",
+            "expr": "source.order_date",
+            "displayName": "Order Date"
+          },
+          {
+            "name": "order_hour",
+            "expr": "source.order_hour",
+            "displayName": "Order Hour"
+          },
+          {
+            "name": "day_of_week",
+            "expr": "source.day_of_week",
+            "displayName": "Day Of Week"
+          },
+          {
+            "name": "day_of_week_sort",
+            "expr": "CASE\n  WHEN source.day_of_week = 'Monday' THEN 1\n  WHEN source.day_of_week = 'Tuesday' THEN 2\n  WHEN source.day_of_week = 'Wednesday' THEN 3\n  WHEN source.day_of_week = 'Thursday' THEN 4\n  WHEN source.day_of_week = 'Friday' THEN 5\n  WHEN source.day_of_week = 'Saturday' THEN 6\n  WHEN source.day_of_week = 'Sunday' THEN 7\n  ELSE 99\nEND",
+            "displayName": "Day Of Week Sort"
+          },
+          {
+            "name": "is_weekend",
+            "expr": "source.is_weekend",
+            "displayName": "Is Weekend"
+          },
+          {
+            "name": "restaurant_id",
+            "expr": "source.restaurant_id",
+            "displayName": "Restaurant Id"
+          },
+          {
+            "name": "customer_id",
+            "expr": "source.customer_id",
+            "displayName": "Customer Id"
+          },
+          {
+            "name": "order_type",
+            "expr": "source.order_type",
+            "displayName": "Order Type"
+          },
+          {
+            "name": "item_count",
+            "expr": "source.item_count",
+            "displayName": "Item Count"
+          },
+          {
+            "name": "total_amount",
+            "expr": "source.total_amount",
+            "displayName": "Total Amount"
+          },
+          {
+            "name": "payment_method",
+            "expr": "source.payment_method",
+            "displayName": "Payment Method"
+          },
+          {
+            "name": "order_status",
+            "expr": "source.order_status",
+            "displayName": "Order Status"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          },
+          {
+            "name": "total_orders",
+            "expr": "COUNT(*)",
+            "displayName": "Total Orders"
+          },
+          {
+            "name": "total_revenue",
+            "expr": "SUM(source.total_amount)",
+            "displayName": "Total Revenue"
+          },
+          {
+            "name": "unique_customers",
+            "expr": "COUNT(DISTINCT source.customer_id)",
+            "displayName": "Unique Customers"
+          },
+          {
+            "name": "active_customers",
+            "expr": "COUNT(DISTINCT CASE WHEN source.order_status NOT IN ('cancelled') THEN source.customer_id END)",
+            "displayName": "Active Customers"
+          },
+          {
+            "name": "avg_order_value",
+            "expr": "MEASURE(`total_revenue`) / MEASURE(`total_orders`)",
+            "displayName": "Avg Order Value"
+          }
+        ]
+      }
+    },
+    {
+      "name": "891e1507",
+      "displayName": "dim_customers",
+      "config": {
+        "version": "1.1",
+        "source": "ws_dbxprojectrc.`02_silver`.dim_customers",
+        "dimensions": [
+          {
+            "name": "customer_id",
+            "expr": "source.customer_id",
+            "displayName": "Customer Id"
+          },
+          {
+            "name": "name",
+            "expr": "source.name",
+            "displayName": "Name"
+          },
+          {
+            "name": "email",
+            "expr": "source.email",
+            "displayName": "Email"
+          },
+          {
+            "name": "phone",
+            "expr": "source.phone",
+            "displayName": "Phone"
+          },
+          {
+            "name": "city",
+            "expr": "source.city",
+            "displayName": "City"
+          },
+          {
+            "name": "join_date",
+            "expr": "source.join_date",
+            "displayName": "Join Date"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "9a3dbed5",
+      "displayName": "Customers by Join Date",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  dim_customers\n",
+        "WHERE\n",
+        "  join_date >= :date_start\n",
+        "  AND join_date <= :date_end"
+      ],
+      "parameters": [
+        {
+          "displayName": "Date Start",
+          "keyword": "date_start",
+          "dataType": "DATE",
+          "defaultSelection": {
+            "values": {
+              "dataType": "DATE",
+              "values": [
+                {
+                  "value": "now-30d/d"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Date End",
+          "keyword": "date_end",
+          "dataType": "DATE",
+          "defaultSelection": {
+            "values": {
+              "dataType": "DATE",
+              "values": [
+                {
+                  "value": "now/d"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "catalog": "ws_dbxprojectrc",
+      "schema": "02_silver"
+    },
+    {
+      "name": "5c9b9662",
+      "displayName": "Filtered Orders Within Selected Date Range",
+      "queryLines": [
+        "SELECT\r\n",
+        "  *\r\n",
+        "FROM\r\n",
+        "  dim_customers\r\n",
+        "WHERE\r\n",
+        "  join_date >= :date_start\r\n",
+        "  AND join_date <= :date_end"
+      ],
+      "parameters": [
+        {
+          "displayName": "Date Start",
+          "keyword": "date_start",
+          "dataType": "DATE",
+          "defaultSelection": {
+            "values": {
+              "dataType": "DATE",
+              "values": [
+                {
+                  "value": "now-30d/d"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Date End",
+          "keyword": "date_end",
+          "dataType": "DATE",
+          "defaultSelection": {
+            "values": {
+              "dataType": "DATE",
+              "values": [
+                {
+                  "value": "now/d"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "catalog": "ws_dbxprojectrc",
+      "schema": "02_silver"
+    },
+    {
+      "name": "fact_order_items_mv",
+      "displayName": "fact_order_items",
+      "config": {
+        "version": "1.1",
+        "source": "ws_dbxprojectrc.`02_silver`.fact_order_items",
+        "dimensions": [
+          {
+            "name": "order_id",
+            "expr": "source.order_id",
+            "displayName": "Order Id"
+          },
+          {
+            "name": "item_id",
+            "expr": "source.item_id",
+            "displayName": "Item Id"
+          },
+          {
+            "name": "restaurant_id",
+            "expr": "source.restaurant_id",
+            "displayName": "Restaurant Id"
+          },
+          {
+            "name": "order_timestamp",
+            "expr": "source.order_timestamp",
+            "displayName": "Order Timestamp"
+          },
+          {
+            "name": "order_date",
+            "expr": "source.order_date",
+            "displayName": "Order Date"
+          },
+          {
+            "name": "order_hour",
+            "expr": "HOUR(source.order_timestamp)",
+            "displayName": "Order Hour"
+          },
+          {
+            "name": "item_name",
+            "expr": "source.item_name",
+            "displayName": "Item Name"
+          },
+          {
+            "name": "category",
+            "expr": "source.category",
+            "displayName": "Category"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "displayName": "Count"
+          },
+          {
+            "name": "total_qty_sold",
+            "expr": "SUM(source.quantity)",
+            "displayName": "Total Qty Sold"
+          },
+          {
+            "name": "item_revenue",
+            "expr": "SUM(source.subtotal)",
+            "displayName": "Item Revenue"
+          },
+          {
+            "name": "item_order_count",
+            "expr": "COUNT(DISTINCT source.order_id)",
+            "displayName": "Item Order Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "review_insights_mv",
+      "displayName": "review_insights",
+      "config": {
+        "version": "1.1",
+        "source": "SELECT\n  r.review_id,\n  r.order_id,\n  r.customer_id,\n  r.restaurant_id,\n  d.name AS restaurant_name,\n  d.city AS city,\n  r.rating,\n  r.review_text,\n  r.sentiment,\n  r.issue_delivery,\n  r.issue_food_quality,\n  r.issue_pricing,\n  r.issue_portion_size,\n  r.review_timestamp,\n  CAST(r.review_timestamp AS DATE) AS review_date\nFROM ws_dbxprojectrc.`02_silver`.fact_reviews r LEFT JOIN ws_dbxprojectrc.`02_silver`.dim_restaurant d\n  ON r.restaurant_id = d.restaurant_id\n",
+        "dimensions": [
+          {
+            "name": "review_id",
+            "expr": "review_id",
+            "displayName": "Review Id"
+          },
+          {
+            "name": "order_id",
+            "expr": "order_id",
+            "displayName": "Order Id"
+          },
+          {
+            "name": "customer_id",
+            "expr": "customer_id",
+            "displayName": "Customer Id"
+          },
+          {
+            "name": "restaurant_id",
+            "expr": "restaurant_id",
+            "displayName": "Restaurant Id"
+          },
+          {
+            "name": "restaurant_name",
+            "expr": "restaurant_name",
+            "displayName": "Restaurant Name"
+          },
+          {
+            "name": "city",
+            "expr": "city",
+            "displayName": "City"
+          },
+          {
+            "name": "rating",
+            "expr": "rating",
+            "displayName": "Rating"
+          },
+          {
+            "name": "review_text",
+            "expr": "review_text",
+            "displayName": "Review Text"
+          },
+          {
+            "name": "sentiment",
+            "expr": "sentiment",
+            "displayName": "Sentiment"
+          },
+          {
+            "name": "issue_delivery",
+            "expr": "issue_delivery",
+            "displayName": "Delivery Issue Flag"
+          },
+          {
+            "name": "issue_food_quality",
+            "expr": "issue_food_quality",
+            "displayName": "Food Quality Issue Flag"
+          },
+          {
+            "name": "issue_pricing",
+            "expr": "issue_pricing",
+            "displayName": "Pricing Issue Flag"
+          },
+          {
+            "name": "issue_portion_size",
+            "expr": "issue_portion_size",
+            "displayName": "Portion Size Issue Flag"
+          },
+          {
+            "name": "review_timestamp",
+            "expr": "review_timestamp",
+            "displayName": "Review Timestamp"
+          },
+          {
+            "name": "review_date",
+            "expr": "review_date",
+            "displayName": "Review Date"
+          }
+        ],
+        "measures": [
+          {
+            "name": "review_count",
+            "expr": "COUNT(*)",
+            "displayName": "Review Count"
+          },
+          {
+            "name": "avg_rating",
+            "expr": "AVG(rating)",
+            "displayName": "Avg Rating"
+          },
+          {
+            "name": "positive_review_count",
+            "expr": "COUNT(CASE WHEN sentiment = 'positive' THEN 1 END)",
+            "displayName": "Positive Review Count"
+          },
+          {
+            "name": "neutral_review_count",
+            "expr": "COUNT(CASE WHEN sentiment = 'neutral' THEN 1 END)",
+            "displayName": "Neutral Review Count"
+          },
+          {
+            "name": "negative_review_count",
+            "expr": "COUNT(CASE WHEN sentiment = 'negative' THEN 1 END)",
+            "displayName": "Negative Review Count"
+          },
+          {
+            "name": "delivery_issue_count",
+            "expr": "COUNT(CASE WHEN LOWER(CAST(issue_delivery AS STRING)) = 'true' THEN 1 END)",
+            "displayName": "Delivery Issue Count"
+          },
+          {
+            "name": "food_quality_issue_count",
+            "expr": "COUNT(CASE WHEN LOWER(CAST(issue_food_quality AS STRING)) = 'true' THEN 1 END)",
+            "displayName": "Food Quality Issue Count"
+          },
+          {
+            "name": "pricing_issue_count",
+            "expr": "COUNT(CASE WHEN LOWER(CAST(issue_pricing AS STRING)) = 'true' THEN 1 END)",
+            "displayName": "Pricing Issue Count"
+          },
+          {
+            "name": "portion_size_issue_count",
+            "expr": "COUNT(CASE WHEN LOWER(CAST(issue_portion_size AS STRING)) = 'true' THEN 1 END)",
+            "displayName": "Portion Size Issue Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "review_issue_categories_mv",
+      "displayName": "review_issue_categories",
+      "config": {
+        "version": "1.1",
+        "source": "WITH base AS (\n  SELECT\n    r.review_id,\n    d.name AS restaurant_name,\n    d.city AS city,\n    CAST(r.review_timestamp AS DATE) AS review_date,\n    r.review_timestamp,\n    r.sentiment,\n    r.issue_delivery,\n    r.issue_food_quality,\n    r.issue_pricing,\n    r.issue_portion_size\n  FROM ws_dbxprojectrc.`02_silver`.fact_reviews r\n  LEFT JOIN ws_dbxprojectrc.`02_silver`.dim_restaurant d\n    ON r.restaurant_id = d.restaurant_id\n) SELECT review_id, restaurant_name, city, review_date, review_timestamp, sentiment, 'Delivery' AS issue_category FROM base WHERE LOWER(CAST(issue_delivery AS STRING)) = 'true' UNION ALL SELECT review_id, restaurant_name, city, review_date, review_timestamp, sentiment, 'Food Quality' AS issue_category FROM base WHERE LOWER(CAST(issue_food_quality AS STRING)) = 'true' UNION ALL SELECT review_id, restaurant_name, city, review_date, review_timestamp, sentiment, 'Pricing' AS issue_category FROM base WHERE LOWER(CAST(issue_pricing AS STRING)) = 'true' UNION ALL SELECT review_id, restaurant_name, city, review_date, review_timestamp, sentiment, 'Portion Size' AS issue_category FROM base WHERE LOWER(CAST(issue_portion_size AS STRING)) = 'true'\n",
+        "dimensions": [
+          {
+            "name": "review_id",
+            "expr": "review_id",
+            "displayName": "Review Id"
+          },
+          {
+            "name": "restaurant_name",
+            "expr": "restaurant_name",
+            "displayName": "Restaurant Name"
+          },
+          {
+            "name": "city",
+            "expr": "city",
+            "displayName": "City"
+          },
+          {
+            "name": "review_date",
+            "expr": "review_date",
+            "displayName": "Review Date"
+          },
+          {
+            "name": "review_timestamp",
+            "expr": "review_timestamp",
+            "displayName": "Review Timestamp"
+          },
+          {
+            "name": "sentiment",
+            "expr": "sentiment",
+            "displayName": "Sentiment"
+          },
+          {
+            "name": "issue_category",
+            "expr": "issue_category",
+            "displayName": "Issue Category"
+          }
+        ],
+        "measures": [
+          {
+            "name": "issue_count",
+            "expr": "COUNT(*)",
+            "displayName": "Issue Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "recent_review_feed",
+      "displayName": "recent_review_feed",
+      "queryLines": [
+        "SELECT\n",
+        "  r.review_id,\n",
+        "  d.name AS restaurant_name,\n",
+        "  d.city,\n",
+        "  r.sentiment,\n",
+        "  r.rating,\n",
+        "  r.review_text,\n",
+        "  r.review_timestamp\n",
+        "FROM\n",
+        "  fact_reviews r\n",
+        "    LEFT JOIN dim_restaurant d\n",
+        "      ON r.restaurant_id = d.restaurant_id\n",
+        "WHERE\n",
+        "  r.sentiment IN ('positive', 'negative')\n",
+        "ORDER BY\n",
+        "  r.review_timestamp DESC"
+      ],
+      "catalog": "ws_dbxprojectrc",
+      "schema": "02_silver"
+    }
+  ],
+  "pages": [
+    {
+      "name": "54f401b0",
+      "displayName": "Restaurant Chain Performance Dashboard",
+      "layout": [
+        {
+          "widget": {
+            "name": "date_range",
+            "queries": [
+              {
+                "name": "dashboards/01f16e3e778918f9b29d96c614170479/datasets/01f16e4128d21507975375deb7d06b81_order_date",
+                "query": {
+                  "datasetName": "a1b1c867",
+                  "fields": [
+                    {
+                      "name": "order_date",
+                      "expression": "`order_date`"
+                    },
+                    {
+                      "name": "order_date_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Date Range"
+              },
+              "selection": {
+                "defaultSelection": {
+                  "range": {
+                    "dataType": "DATE",
+                    "min": {
+                      "value": "now-30d/d"
+                    },
+                    "max": {
+                      "value": "now/d"
+                    }
+                  }
+                }
+              },
+              "widgetType": "filter-date-range-picker",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "order_date",
+                    "queryName": "dashboards/01f16e3e778918f9b29d96c614170479/datasets/01f16e4128d21507975375deb7d06b81_order_date"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "total_orders",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a37fc197",
+                  "fields": [
+                    {
+                      "name": "sum(total_orders)",
+                      "expression": "SUM(`total_orders`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Total Orders"
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_orders)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "total_revenue",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a37fc197",
+                  "fields": [
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Total Revenue"
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_revenue)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "active_customers",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a1b1c867",
+                  "fields": [
+                    {
+                      "name": "measure(active_customers)",
+                      "expression": "MEASURE(`active_customers`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Active Customers"
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(active_customers)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 5,
+            "y": 1,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "aov",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a1b1c867",
+                  "fields": [
+                    {
+                      "name": "measure(avg_order_value)",
+                      "expression": "MEASURE(`avg_order_value`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "AOV"
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(avg_order_value)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 7,
+            "y": 1,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "unique_customers",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "891e1507",
+                  "fields": [
+                    {
+                      "name": "countdistinct(customer_id)",
+                      "expression": "COUNT(DISTINCT `customer_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Unique Customers"
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "countdistinct(customer_id)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "daily_sales",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a1b1c867",
+                  "fields": [
+                    {
+                      "name": "order_date",
+                      "expression": "`order_date`"
+                    },
+                    {
+                      "name": "measure(total_revenue)",
+                      "expression": "MEASURE(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "showTitle": true,
+                "title": "Daily Sales"
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "order_date",
+                  "axis": {
+                    "title": "Date"
+                  },
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(total_revenue)",
+                  "axis": {
+                    "title": "Revenue"
+                  },
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 8,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "revenue_by_order_type",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a1b1c867",
+                  "fields": [
+                    {
+                      "name": "measure(total_revenue)",
+                      "expression": "MEASURE(`total_revenue`)"
+                    },
+                    {
+                      "name": "order_type",
+                      "expression": "`order_type`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "showTitle": true,
+                "title": "Revenue By Order Type"
+              },
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "measure(total_revenue)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  }
+                },
+                "color": {
+                  "fieldName": "order_type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 3,
+            "width": 4,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "best_selling_items",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "fact_order_items_mv",
+                  "fields": [
+                    {
+                      "name": "item_name",
+                      "expression": "`item_name`"
+                    },
+                    {
+                      "name": "measure(total_qty_sold)",
+                      "expression": "MEASURE(`total_qty_sold`)"
+                    }
+                  ],
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "DESC",
+                      "expression": "MEASURE(`total_qty_sold`)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "showTitle": true,
+                "title": "Best Selling Items"
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "item_name",
+                  "axis": {
+                    "title": "Item"
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "measure-reversed",
+                      "measure": {
+                        "fieldName": "measure(total_qty_sold)"
+                      }
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(total_qty_sold)",
+                  "axis": {
+                    "title": "Qty Sold"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 7,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "revenue_by_food_category",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "fact_order_items_mv",
+                  "fields": [
+                    {
+                      "name": "category",
+                      "expression": "`category`"
+                    },
+                    {
+                      "name": "measure(item_revenue)",
+                      "expression": "MEASURE(`item_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "DESC",
+                      "expression": "MEASURE(`item_revenue`)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "showTitle": true,
+                "title": "Revenue By Food Category"
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "category",
+                  "axis": {
+                    "title": "Category"
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "measure-reversed",
+                      "measure": {
+                        "fieldName": "measure(item_revenue)"
+                      }
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(item_revenue)",
+                  "axis": {
+                    "title": "Revenue"
+                  },
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 7,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "order_volume_by_dow",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a1b1c867",
+                  "fields": [
+                    {
+                      "name": "day_of_week",
+                      "expression": "`day_of_week`"
+                    },
+                    {
+                      "name": "measure(total_orders)",
+                      "expression": "MEASURE(`total_orders`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "showTitle": true,
+                "title": "Order Volume By DOW"
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "day_of_week",
+                  "axis": {
+                    "title": "Day of Week",
+                    "labelAngle": 45
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "custom-order",
+                      "orderedValues": [
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                        "Sunday"
+                      ]
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(total_orders)",
+                  "axis": {
+                    "title": "Orders"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 11,
+            "width": 4,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "peak_hour_analysis",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a1b1c867",
+                  "fields": [
+                    {
+                      "name": "measure(total_orders)",
+                      "expression": "MEASURE(`total_orders`)"
+                    },
+                    {
+                      "name": "order_hour",
+                      "expression": "`order_hour`"
+                    },
+                    {
+                      "name": "day_of_week",
+                      "expression": "`day_of_week`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "showTitle": true,
+                "title": "Peak Hour Analysis"
+              },
+              "widgetType": "heatmap",
+              "encodings": {
+                "x": {
+                  "fieldName": "order_hour",
+                  "axis": {
+                    "title": "Hour of Day"
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "custom-order",
+                      "orderedValues": [
+                        0,
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11,
+                        12,
+                        13,
+                        14,
+                        15,
+                        16,
+                        17,
+                        18,
+                        19,
+                        20,
+                        21,
+                        22,
+                        23
+                      ]
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "day_of_week",
+                  "axis": {
+                    "title": "Day of Week"
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "custom-order",
+                      "orderedValues": [
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                        "Sunday"
+                      ]
+                    }
+                  }
+                },
+                "color": {
+                  "fieldName": "measure(total_orders)",
+                  "legend": {
+                    "title": "Orders"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  },
+                  "scale": {
+                    "type": "quantitative",
+                    "colorRamp": {
+                      "mode": "scheme",
+                      "scheme": "orangered"
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 11,
+            "width": 8,
+            "height": 4
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "c353b51b",
+      "displayName": "Review Insights",
+      "layout": [
+        {
+          "widget": {
+            "name": "restaurant_filter",
+            "queries": [
+              {
+                "name": "dashboards/01f16e3e778918f9b29d96c614170479/datasets/01f16e4f1fcc177bac7e66c6e43fd682_restaurant_name",
+                "query": {
+                  "datasetName": "review_insights_mv",
+                  "fields": [
+                    {
+                      "name": "restaurant_name",
+                      "expression": "`restaurant_name`"
+                    },
+                    {
+                      "name": "restaurant_name_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "dashboards/01f16e3e778918f9b29d96c614170479/datasets/01f16e4f646b1db68277a42cd15a8d94_restaurant_name",
+                "query": {
+                  "datasetName": "review_issue_categories_mv",
+                  "fields": [
+                    {
+                      "name": "restaurant_name",
+                      "expression": "`restaurant_name`"
+                    },
+                    {
+                      "name": "restaurant_name_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "dashboards/01f16e3e778918f9b29d96c614170479/datasets/01f16e4f85ac19d8b5053f00ab805c86_restaurant_name",
+                "query": {
+                  "datasetName": "recent_review_feed",
+                  "fields": [
+                    {
+                      "name": "restaurant_name",
+                      "expression": "`restaurant_name`"
+                    },
+                    {
+                      "name": "restaurant_name_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Restaurant Filter",
+                "showTitle": true
+              },
+              "scale": {
+                "type": "categorical",
+                "sort": {
+                  "by": "natural-order"
+                }
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "restaurant_name",
+                    "queryName": "dashboards/01f16e3e778918f9b29d96c614170479/datasets/01f16e4f1fcc177bac7e66c6e43fd682_restaurant_name"
+                  },
+                  {
+                    "fieldName": "restaurant_name",
+                    "queryName": "dashboards/01f16e3e778918f9b29d96c614170479/datasets/01f16e4f646b1db68277a42cd15a8d94_restaurant_name"
+                  },
+                  {
+                    "fieldName": "restaurant_name",
+                    "queryName": "dashboards/01f16e3e778918f9b29d96c614170479/datasets/01f16e4f85ac19d8b5053f00ab805c86_restaurant_name"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "review_count",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "review_insights_mv",
+                  "fields": [
+                    {
+                      "name": "measure(review_count)",
+                      "expression": "MEASURE(`review_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Review Count",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(review_count)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "avg_rating",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "review_insights_mv",
+                  "fields": [
+                    {
+                      "name": "measure(avg_rating)",
+                      "expression": "MEASURE(`avg_rating`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Avg Rating",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(avg_rating)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 1,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "positive_reviews",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "review_insights_mv",
+                  "fields": [
+                    {
+                      "name": "measure(positive_review_count)",
+                      "expression": "MEASURE(`positive_review_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Positive Reviews",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(positive_review_count)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 1,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "neutral_reviews",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "review_insights_mv",
+                  "fields": [
+                    {
+                      "name": "measure(neutral_review_count)",
+                      "expression": "MEASURE(`neutral_review_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Neutral Reviews",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(neutral_review_count)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 1,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "negative_reviews",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "review_insights_mv",
+                  "fields": [
+                    {
+                      "name": "measure(negative_review_count)",
+                      "expression": "MEASURE(`negative_review_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Negative Reviews",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(negative_review_count)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 1,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "city_count",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "review_insights_mv",
+                  "fields": [
+                    {
+                      "name": "countdistinct(city)",
+                      "expression": "COUNT(DISTINCT `city`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Cities Covered",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "countdistinct(city)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 10,
+            "y": 1,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "review_volume_over_time",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "review_insights_mv",
+                  "fields": [
+                    {
+                      "name": "review_date",
+                      "expression": "`review_date`"
+                    },
+                    {
+                      "name": "measure(review_count)",
+                      "expression": "MEASURE(`review_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Review Volume over Time",
+                "showTitle": true
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "review_date",
+                  "axis": {
+                    "title": "Review Date"
+                  },
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(review_count)",
+                  "axis": {
+                    "title": "Reviews"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "sentiment_trend",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "review_insights_mv",
+                  "fields": [
+                    {
+                      "name": "review_date",
+                      "expression": "`review_date`"
+                    },
+                    {
+                      "name": "measure(positive_review_count)",
+                      "expression": "MEASURE(`positive_review_count`)"
+                    },
+                    {
+                      "name": "measure(neutral_review_count)",
+                      "expression": "MEASURE(`neutral_review_count`)"
+                    },
+                    {
+                      "name": "measure(negative_review_count)",
+                      "expression": "MEASURE(`negative_review_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Sentiment Trend",
+                "showTitle": true
+              },
+              "mark": {
+                "colors": [
+                  "#22C55E",
+                  "#F59E0B",
+                  "#EF4444"
+                ]
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "review_date",
+                  "axis": {
+                    "title": "Review Date"
+                  },
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fields": [
+                    {
+                      "fieldName": "measure(positive_review_count)",
+                      "displayName": "Positive"
+                    },
+                    {
+                      "fieldName": "measure(neutral_review_count)",
+                      "displayName": "Neutral"
+                    },
+                    {
+                      "fieldName": "measure(negative_review_count)",
+                      "displayName": "Negative"
+                    }
+                  ],
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "axis": {
+                    "title": "Review Count"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  }
+                },
+                "color": {
+                  "legend": {
+                    "title": "Sentiment"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 3,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "reviews_by_city",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "review_insights_mv",
+                  "fields": [
+                    {
+                      "name": "city",
+                      "expression": "`city`"
+                    },
+                    {
+                      "name": "measure(review_count)",
+                      "expression": "MEASURE(`review_count`)"
+                    }
+                  ],
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "DESC",
+                      "expression": "MEASURE(`review_count`)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Reviews by City",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "city",
+                  "axis": {
+                    "title": "City",
+                    "labelAngle": 45
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "measure-reversed",
+                      "measure": {
+                        "fieldName": "measure(review_count)"
+                      }
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(review_count)",
+                  "axis": {
+                    "title": "Review Count"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 7,
+            "width": 4,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "ratings_distribution",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "review_insights_mv",
+                  "fields": [
+                    {
+                      "name": "rating",
+                      "expression": "`rating`"
+                    },
+                    {
+                      "name": "measure(review_count)",
+                      "expression": "MEASURE(`review_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Ratings Distribution",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "rating",
+                  "axis": {
+                    "title": "Rating"
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "natural-order"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(review_count)",
+                  "axis": {
+                    "title": "Review Count"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 7,
+            "width": 4,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "issue_categorization",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "review_issue_categories_mv",
+                  "fields": [
+                    {
+                      "name": "issue_category",
+                      "expression": "`issue_category`"
+                    },
+                    {
+                      "name": "measure(issue_count)",
+                      "expression": "MEASURE(`issue_count`)"
+                    }
+                  ],
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "DESC",
+                      "expression": "MEASURE(`issue_count`)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Issue Categorization",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "issue_category",
+                  "axis": {
+                    "title": "Issue Category",
+                    "labelAngle": 45
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "measure-reversed",
+                      "measure": {
+                        "fieldName": "measure(issue_count)"
+                      }
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(issue_count)",
+                  "axis": {
+                    "title": "Issue Count"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 7,
+            "width": 4,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "delivery_issues",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "review_insights_mv",
+                  "fields": [
+                    {
+                      "name": "measure(delivery_issue_count)",
+                      "expression": "MEASURE(`delivery_issue_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Delivery Issues",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(delivery_issue_count)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 11,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "food_quality_issues",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "review_insights_mv",
+                  "fields": [
+                    {
+                      "name": "measure(food_quality_issue_count)",
+                      "expression": "MEASURE(`food_quality_issue_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Food Quality Issues",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(food_quality_issue_count)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 11,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "pricing_issues",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "review_insights_mv",
+                  "fields": [
+                    {
+                      "name": "measure(pricing_issue_count)",
+                      "expression": "MEASURE(`pricing_issue_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Pricing Issues",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(pricing_issue_count)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 11,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "portion_size_issues",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "review_insights_mv",
+                  "fields": [
+                    {
+                      "name": "measure(portion_size_issue_count)",
+                      "expression": "MEASURE(`portion_size_issue_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Portion Size Issues",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(portion_size_issue_count)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 11,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "recent_review_feed",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "recent_review_feed",
+                  "fields": [
+                    {
+                      "name": "review_timestamp",
+                      "expression": "`review_timestamp`"
+                    },
+                    {
+                      "name": "restaurant_name",
+                      "expression": "`restaurant_name`"
+                    },
+                    {
+                      "name": "city",
+                      "expression": "`city`"
+                    },
+                    {
+                      "name": "sentiment",
+                      "expression": "`sentiment`"
+                    },
+                    {
+                      "name": "rating",
+                      "expression": "`rating`"
+                    },
+                    {
+                      "name": "review_text",
+                      "expression": "`review_text`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Recent Review Feed",
+                "showTitle": true
+              },
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "review_timestamp",
+                    "useForSearch": false
+                  },
+                  {
+                    "fieldName": "restaurant_name",
+                    "useForSearch": true
+                  },
+                  {
+                    "fieldName": "city",
+                    "useForSearch": true
+                  },
+                  {
+                    "fieldName": "sentiment",
+                    "useForSearch": true
+                  },
+                  {
+                    "fieldName": "rating",
+                    "useForSearch": false
+                  },
+                  {
+                    "fieldName": "review_text",
+                    "useForSearch": true
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 13,
+            "width": 12,
+            "height": 4
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
